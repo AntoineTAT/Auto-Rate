@@ -25,10 +25,11 @@ export class AutovisualController {
         @Body('dt_entry_service') dt_entry_service: string,
         @Body('fuel') fuel: string,
         @Body('transmission') transmission:string,
-        @Body('country_ref') country_ref:string
+        @Body('country_ref') country_ref:string,
+        @Body('dt_valuation') dt_valuation: string
     ) {
-        const price = await this.autovisualService.normalPricing
+        const price = await this.autovisualService.vipPricing(txt, km, dt_entry_service, fuel, transmission, country_ref, dt_valuation)
+        return price
     }
-
 
 }
