@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { RolesGuard } from './roles/roles.guard';
 import { StripeModule } from './stripe/stripe.module';
 import { UsersModule } from './users/users.module';
+import { AutovisualModule } from './autovisual/autovisual.module';
 
 @Module({
   imports: 
@@ -19,6 +20,7 @@ import { UsersModule } from './users/users.module';
       ConfigModule.forRoot({
         isGlobal: true,
       }),
+      AutovisualModule,
     ],
   controllers: [AppController],
   providers: [

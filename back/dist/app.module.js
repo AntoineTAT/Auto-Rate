@@ -17,6 +17,7 @@ const auth_module_1 = require("./auth/auth.module");
 const roles_guard_1 = require("./roles/roles.guard");
 const stripe_module_1 = require("./stripe/stripe.module");
 const users_module_1 = require("./users/users.module");
+const autovisual_module_1 = require("./autovisual/autovisual.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -29,6 +30,7 @@ AppModule = __decorate([
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
             }),
+            autovisual_module_1.AutovisualModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [
