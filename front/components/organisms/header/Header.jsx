@@ -1,5 +1,5 @@
-import MiddleHeader from "../molecules/MiddleHeader"
-import RightHeader from "../molecules/RightHeader"
+import MiddleHeader from "../../molecules/header/MiddleHeader";
+import RightHeader from "../../molecules/header/RightHeader";
 import { useRouter } from "next/router"
 import Image from "next/image"
 

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Header from "../../components/organisms/Header";
 import useLocalStorage from "../../hooks/uselocalstorage";
-//import GoogleAuth from "./googleOAuth";
 
 function Login() {
   const [token, setToken] = useLocalStorage("token", null); // LocalStorage

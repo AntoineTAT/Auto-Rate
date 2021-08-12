@@ -1,4 +1,4 @@
-import HeaderItem from "../atoms/HeaderItem"
+import HeaderItem from "../../atoms/header/HeaderItem";
 import Link from "next/link"
 import { HomeIcon , CollectionIcon, CurrencyEuroIcon } from "@heroicons/react/outline"
 import { useEffect, useState } from "react/cjs/react.development";
