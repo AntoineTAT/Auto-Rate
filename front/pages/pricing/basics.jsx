@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Header from '../../components/organisms/header/Header'
+import BasicsPricing from '../../components/organisms/pricing/BasicsPricing'
 
 export default function Home() {
   return (
@@ -11,6 +12,8 @@ export default function Home() {
       </Head>
 
       <Header/>
+
+      <BasicsPricing/>
     </div>
   )
 }

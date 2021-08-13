@@ -2,10 +2,10 @@ import BlueButton from "../button/BlueButton";
 
 function PricingCaseStyle({title, options, redirect}) {
     return (
-        <div className="bg-white shadow-md rounded h-40 w-full mx-10">
-            <p className="text-black text-center font-bold pt-3">
+        <div className="bg-white shadow-md rounded border-8 border-gray-400 h-48 w-full mx-10">
+            <h1 className="text-black text-center   text-3xl font-bold pt-3">
                 {title}
-            </p>
+            </h1>
 
             <p className="text-black text-center pt-5">
             {options}

@@ -1,5 +1,8 @@
+import { CheckCircleIcon } from '@heroicons/react/outline'
 import Head from 'next/head'
+import BlueButton from '../../components/atoms/button/BlueButton'
 import Header from '../../components/organisms/header/Header'
+import PremiumPricing from '../../components/organisms/pricing/PremiumPricing'
 
 export default function Home() {
   return (
@@ -11,6 +14,8 @@ export default function Home() {
       </Head>
 
       <Header/>
+
+      <PremiumPricing/>
     </div>
   )
 }

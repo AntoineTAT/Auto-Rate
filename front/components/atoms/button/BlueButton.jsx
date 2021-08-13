@@ -10,7 +10,7 @@ function BlueButton({title, redirect}) {
                             text-white font-bold py-2 px-4 rounded 
                             focus:outline-none focus:shadow-outline"
                     type="submit"
-                    onClick={() => router.push(`/pricing/${redirect}`)}
+                    onClick={() => router.push(`${redirect}`)}
             >
                 {title}
             </button>

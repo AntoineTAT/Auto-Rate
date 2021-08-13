@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Header from "../../components/organisms/Header";
+import Header from "../../components/organisms/header/Header";
 
 function Register() {
 
