@@ -13,6 +13,8 @@ import {
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../roles/roles.decorator';
+import { Role } from '../roles/role.enum';
 import { StripeService } from 'src/stripe/stripe.service';
 
 @Controller('users')
@@ -53,5 +55,78 @@ export class UsersController {
         async getAllusers() {
         const users = await this.usersService.getUsers();
         return users;
-  }
+    }
+
+    @Get(':id')
+        async getuser(@Param('id') userId: string) {
+        return this.usersService.getSingleUser(userId);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.Admin, Role.Client)
+    @Patch(':id')
+    async updateUser(
+        @Param('id') userId: string,
+        @Body('username') userUsername: string,
+        @Body('email') userEmail: string,       
+        @Body('password') userPassword: string,       
+        @Body('invoices') userinvoices: any,
+        @Body('roles') userRole: Role,
+        @Body('stripeId') userStripeId: string,
+        @Body('advert') userAdvert: any,
+        @Body('pricing') userPricing: any
+    ) {
+        if (userPassword) {
+            const salt = await bcrypt.genSalt();
+            const password = await bcrypt.hash(userPassword, salt);
+
+            const user = await this.usersService.updateUser(
+                userId,
+                userUsername,
+                userEmail,
+                userPassword,
+                userinvoices,
+                userRole,
+                userStripeId,
+                userAdvert,
+                userPricing
+                
+            );
+            return {
+                statusCode: HttpStatus.OK,
+                message: 'user updated successfully',
+                data: user,
+            };
+        } else {
+            const user = await this.usersService.updateUser(
+                userId,
+                userUsername,
+                userEmail,
+                userPassword,
+                userinvoices,
+                userRole,
+                userStripeId,
+                userAdvert,
+                userPricing
+            );
+            return {
+                statusCode: HttpStatus.OK,
+                message: 'user updated successfully',
+                user: user,
+            };
+        }
+    }
+
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.Admin || Role.Client)
+    async deleteUser(@Param('id') userId: string) {
+        const isDeleted = await this.usersService.deleteUser(userId);
+        if (isDeleted) {
+        return {
+            statusCode: HttpStatus.OK,
+            message: 'User deleted successfully',
+        };
+        }
+    }
 }

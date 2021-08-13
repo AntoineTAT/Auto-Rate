@@ -33,15 +33,28 @@ export class AutovisualService {
             }),
             redirect: 'follow'
         };
-
-        var res = ""
-
-        await fetch("https://api.autovisual.com/v2/av", requestOptions)
-            .then(response => response.json())
-            .then(result => {res=result.value, console.log("response autovisual :", res)})
-            .catch(error => console.log('error', error))
         
-        return res
+        const res = await fetch("https://api.autovisual.com/v2/av",requestOptions)
+        console.log("httpstatus",res.status)
+
+        if (res.status == 400) {
+            const data = await res.json()
+            console.log("data invalide",data)
+            return {
+                statusCode: HttpStatus.BAD_REQUEST,
+                error: data.error.title
+                
+            }
+        }
+
+        else if (res.status == 200) {
+            const data = await res.json()
+            console.log("data valide",data)
+            return {
+                statusCode: HttpStatus.OK,
+                data
+            }
+        }
     }
 
     async vipPricing(
@@ -77,13 +90,26 @@ export class AutovisualService {
             redirect: 'follow'
         };
 
-        var res = ""
+        const res = await fetch("https://api.autovisual.com/v2/av",requestOptions)
+        console.log("httpstatus",res.status)
 
-        await fetch("https://api.autovisual.com/v2/av", requestOptions)
-            .then(response => response.json())
-            .then(result => {res=result.value, console.log("response autovisual :", res)})
-            .catch(error => console.log('error', error))
-        
-        return res
+        if (res.status == 400) {
+            const data = await res.json()
+            console.log("data invalide",data)
+            return {
+                statusCode: HttpStatus.BAD_REQUEST,
+                error: data.error.title
+                
+            }
+        }
+
+        else if (res.status == 200) {
+            const data = await res.json()
+            console.log("data valide",data)
+            return {
+                statusCode: HttpStatus.OK,
+                data
+            }
+        }
     }
 }

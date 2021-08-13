@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './users.model';
+import { Role } from '../roles/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -27,33 +28,27 @@ export class UsersService {
       const newUser = new this.UserModel({
         username,
         email,
-        mailConfirmed: false,
         password,
-        gems: 0,
-        note_user: 0,
-        note_organisator: 0,
-        gemsWon: 0,
-        games: [],
         invoices: [],
-        roles: 'organisateur',
-        discordId: 'discord',
+        roles: 'client',
         stripeId,
-        wins: 0,
-        losses: 0,
-        firstPurchase: false,
-        googleId: 'google',
-        goodies: [],
       });
-      const token = Math.floor(1000 + Math.random() * 9000).toString();
-      const User = newUser;
-      //await this.mailService.sendUserConfirmation(User, token);
       const result = await newUser.save();
       console.log(result);
       return result;
     }
   }
 
+    //Fonction FIND one user => username
+    async findOne(username: string): Promise<User | undefined> {
+      const user = await this.UserModel.find({ username: username });
+      console.log(user);
+      if (user.length > 0) {
+        return user[0];
+      }
+    }
 
+    //Fonction FIND one user => email
     async findByEmail(email: string): Promise<User | undefined> {
         const user = await this.UserModel.find({ email: email });
         console.log('user service findOneMail ' + user);
@@ -74,4 +69,77 @@ export class UsersService {
         stripeId: User.stripeId,
         }));
     }
+
+    async getSingleUser(UserId: string) {
+      const User = await this.findUser(UserId);
+      return {
+        id: User.id,
+        username: User.username,
+        email: User.email,
+        password: User.password,
+        stripeId: User.stripeId,
+      };
+    }
+
+    private async findUser(id: string): Promise<User> {
+      let User;
+      try {
+        User = await this.UserModel.findById(id).exec();
+      } catch (error) {
+        throw new NotFoundException('Could not find User.');
+      }
+      if (!User) {
+        throw new NotFoundException('Could not find User.');
+      }
+      return User;
+    }
+
+    async updateUser(
+      UserId: string,
+      username: string,
+      email: string,
+      password: string,
+      invoices: any,
+      role: Role,
+      stripeId: string,
+      advert: any,
+      pricing: any
+    ) {
+      const updatedUser = await this.findUser(UserId);
+      if (username) {
+        updatedUser.username = username;
+      }
+      if (email) {
+        updatedUser.email = email;
+      }
+      if (password) {
+        updatedUser.password = password;
+      }
+      if (invoices) {
+        updatedUser.invoices.push(invoices);
+      }
+      if (role) {
+        updatedUser.roles = role;
+      }
+      if (stripeId) {
+        updatedUser.stripeId = stripeId;
+      }
+      if (advert) {
+        updatedUser.advert.push(advert);
+      }
+      if (pricing) {
+        updatedUser.pricing.push(pricing)
+      }
+      updatedUser.save();
+      return updatedUser;
+    }
+
+    //Fonction DELETE user => id
+  async deleteUser(UserId: string) {
+    const result = await this.UserModel.deleteOne({ _id: UserId }).exec();
+    if (result.n === 0) {
+      throw new NotFoundException('Could not find User.');
+    }
+    return true;
+  }
 }
