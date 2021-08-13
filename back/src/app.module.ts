@@ -1,10 +1,34 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { RolesGuard } from './roles/roles.guard';
+import { StripeModule } from './stripe/stripe.module';
+import { UsersModule } from './users/users.module';
+import { AutovisualModule } from './autovisual/autovisual.module';
 
 @Module({
-  imports: [],
+  imports: 
+    [
+      MongooseModule.forRoot('mongodb+srv://admin:admin@autorate.ql0fd.mongodb.net/Autorate?retryWrites=true&w=majority'),
+      AuthModule,
+      UsersModule,
+      StripeModule,
+      ConfigModule.forRoot({
+        isGlobal: true,
+      }),
+      AutovisualModule,
+    ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    }
+  ],
 })
 export class AppModule {}
