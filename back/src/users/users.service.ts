@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './users.model';
 import { Role } from '../roles/role.enum';
+import { MailsService } from 'src/mails/mails.service';
 
 @Injectable()
 export class UsersService {
@@ -10,6 +11,7 @@ export class UsersService {
     constructor(
         @InjectModel('User')
         private readonly UserModel: Model<User>,
+        private mailsService: MailsService
     ) {}
 
     //Insert User
@@ -19,7 +21,7 @@ export class UsersService {
         password: string,
         stripeId: string,
         ) {
-    const user = await this.findByEmail(email);
+    const user = await this.findByEmail(email);   
     console.log('Find user before register', user);
     if (user) {
       return 'Username already exist !';
@@ -28,11 +30,17 @@ export class UsersService {
       const newUser = new this.UserModel({
         username,
         email,
+        mailConfirmed: false,
         password,
         invoices: [],
         roles: 'client',
         stripeId,
+        pricing: [],
+        advert: [],
       });
+      const token = Math.floor(1000 + Math.random() * 9000).toString();
+      const User = newUser;
+      await this.mailsService.sendUserConfirmation(User, token)
       const result = await newUser.save();
       console.log(result);
       return result;
@@ -64,9 +72,12 @@ export class UsersService {
         id: User.id,
         username: User.username,
         email: User.email,
-        //mailConfirmed: User.mailConfirmed,
+        mailConfirmed: User.mailConfirmed,
         password: User.password,
         stripeId: User.stripeId,
+        invoices: User.invoices,
+        advert: User.advert,
+        pricing: User.pricing
         }));
     }
 
@@ -76,8 +87,12 @@ export class UsersService {
         id: User.id,
         username: User.username,
         email: User.email,
+        mailConfirmed: User.mailConfirmed,
         password: User.password,
         stripeId: User.stripeId,
+        invoices: User.invoices,
+        advert: User.advert,
+        pricing: User.pricing
       };
     }
 
@@ -98,6 +113,7 @@ export class UsersService {
       UserId: string,
       username: string,
       email: string,
+      mailConfirmed: boolean,
       password: string,
       invoices: any,
       role: Role,
@@ -111,6 +127,9 @@ export class UsersService {
       }
       if (email) {
         updatedUser.email = email;
+      }
+      if (mailConfirmed) {
+        updatedUser.mailConfirmed = mailConfirmed
       }
       if (password) {
         updatedUser.password = password;

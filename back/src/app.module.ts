@@ -9,6 +9,8 @@ import { RolesGuard } from './roles/roles.guard';
 import { StripeModule } from './stripe/stripe.module';
 import { UsersModule } from './users/users.module';
 import { AutovisualModule } from './autovisual/autovisual.module';
+import { AdvertModule } from './advert/advert.module';
+import { MailsModule } from './mails/mails.module';
 
 @Module({
   imports: 
@@ -21,6 +23,8 @@ import { AutovisualModule } from './autovisual/autovisual.module';
         isGlobal: true,
       }),
       AutovisualModule,
+      AdvertModule,
+      MailsModule,
     ],
   controllers: [AppController],
   providers: [
@@ -28,7 +32,7 @@ import { AutovisualModule } from './autovisual/autovisual.module';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
-    }
+    },
   ],
 })
 export class AppModule {}

@@ -18,6 +18,8 @@ const roles_guard_1 = require("./roles/roles.guard");
 const stripe_module_1 = require("./stripe/stripe.module");
 const users_module_1 = require("./users/users.module");
 const autovisual_module_1 = require("./autovisual/autovisual.module");
+const advert_module_1 = require("./advert/advert.module");
+const mails_module_1 = require("./mails/mails.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -31,6 +33,8 @@ AppModule = __decorate([
                 isGlobal: true,
             }),
             autovisual_module_1.AutovisualModule,
+            advert_module_1.AdvertModule,
+            mails_module_1.MailsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [
@@ -38,7 +42,7 @@ AppModule = __decorate([
             {
                 provide: core_1.APP_GUARD,
                 useClass: roles_guard_1.RolesGuard,
-            }
+            },
         ],
     })
 ], AppModule);
