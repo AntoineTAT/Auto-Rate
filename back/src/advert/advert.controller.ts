@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/roles/role.enum';
 import { Roles } from 'src/roles/roles.decorator';
@@ -9,10 +9,15 @@ export class AdvertController {
     constructor(private readonly advertService: AdvertService) {}
 
     @Post()
-    //@UseGuards(JwtAuthGuard)
-    //@Roles(Role.Admin, Role.Client)
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.Admin, Role.Client)
     async addAdvert(
         @Body('description') advertDescription: string,
+        @Body('date') advertDate: string,
+        @Body('author') advertAuthor: string,
+        @Body('brand') advertbrand: string,
+        @Body('modelCar') advertModelCar: string,
+        @Body('price') advertPrice: number,
         @Body('km') advertKm: number,
         @Body('release') advertRelease: string,
         @Body('fuel') advertFuel: string,
@@ -21,6 +26,11 @@ export class AdvertController {
     ) {
         const advert = await this.advertService.insertAdvert(
             advertDescription,
+            advertDate,
+            advertAuthor,
+            advertbrand,
+            advertModelCar,
+            advertPrice,
             advertKm,
             advertRelease,
             advertFuel,
@@ -51,6 +61,9 @@ export class AdvertController {
     async updateAdvert(
         @Param('id') advertId: string,
         @Body('description') advertDescription: string,
+        @Body('brand') advertBrand: string,
+        @Body('modelCar') advertModelCar: string,
+        @Body('price') advertPrice: number,
         @Body('km') advertKm: number,
         @Body('release') advertRelease: string,
         @Body('fuel') advertFuel: string,
@@ -60,6 +73,9 @@ export class AdvertController {
         const advert = await this.advertService.updateAdvert(
             advertId,
             advertDescription,
+            advertBrand,
+            advertModelCar,
+            advertPrice,
             advertKm,
             advertRelease,
             advertFuel,
@@ -70,6 +86,20 @@ export class AdvertController {
             statusCode: HttpStatus.OK,
             message: 'advert updated successfully',
             data: advert
+        }
+    }
+
+    @Delete('id')
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.Admin, Role.Client)
+    async removeAdvert(@Param('id') advertId:  string) {
+        const isDeleted = await this.advertService.deleteAdvert(advertId)
+        
+        if (isDeleted) {
+            return {
+                statusCode: HttpStatus.OK,
+                message: 'advert deleted successfully'
+            }
         }
     }
 }

@@ -13,6 +13,11 @@ export class AdvertService {
     //POST
     async insertAdvert(
         description: string,
+        date: string,
+        author: string,
+        brand: string,
+        modelCar: string,
+        price: number,
         km: number,
         release: string,
         fuel: string,
@@ -21,6 +26,11 @@ export class AdvertService {
     ) {
         const newAdvert = new this.AdvertModel({
             description,
+            date,
+            author,
+            brand,
+            modelCar,
+            price,
             km,
             release,
             fuel,
@@ -38,6 +48,11 @@ export class AdvertService {
         return adverts.map((Advert) => ({
             id: Advert.id,
             description: Advert.description,
+            date: Advert.date,
+            author: Advert.author,
+            brand: Advert.brand,
+            modelCar: Advert.modelCar,
+            price: Advert.price,
             km: Advert.km,
             release: Advert.release,
             fuel: Advert.fuel,
@@ -53,6 +68,11 @@ export class AdvertService {
         return {
             id: Advert.id,
             description: Advert.description,
+            date: Advert.date,
+            author: Advert.author,
+            brand: Advert.brand,
+            modelCar: Advert.modelCar,
+            price: Advert.price,
             km: Advert.km,
             release: Advert.release,
             fuel: Advert.fuel,
@@ -66,6 +86,9 @@ export class AdvertService {
     async updateAdvert(
         AdvertId: string,
         description: string,
+        brand: string,
+        modelCar: string,
+        price: number,
         km: number,
         release: string,
         fuel: string,
@@ -75,6 +98,15 @@ export class AdvertService {
         const updatedAdvert = await this.findAdvert(AdvertId)
         if (description) {
             updatedAdvert.description = description
+        }
+        if (brand) {
+            updatedAdvert.brand = brand
+        }
+        if (modelCar) {
+            updatedAdvert.modelCar = modelCar
+        }
+        if (price) {
+            updatedAdvert.price = price
         }
         if (km) {
             updatedAdvert.km = km
