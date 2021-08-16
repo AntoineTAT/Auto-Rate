@@ -39,6 +39,7 @@ const CheckoutForm = () => {
     const userId = LocalStorage("userId")[0];
     const token = LocalStorage("token")[0];
     const roles = LocalStorage("roles")[0];
+    const username = LocalStorage("username")[0];
 
     const [pi, setPiId] = useState("");
     const [pm, setPmId] = useState("");
@@ -249,11 +250,34 @@ const CheckoutForm = () => {
       }
       else if(info.statusCode == 200) {
         console.log(info.data.value)
+        const pri = info.data.value.c
+        const pro = info.data.value.b
         setPrivate(info.data.value.c)
         setProfessional(info.data.value.b)
         setForm(false)
         setResult(true)
         setSearch(false)
+
+        const mail_url = "http://localhost:4000/mail"
+
+        const mail = new Request(mail_url, {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                priv: pri,
+                professional: pro,
+                username: username
+            })
+          }
+        )
+
+        const res = await fetch(mail)
+        const response = await res.json()
+        console.log(response)
+            
       }
     }
 
@@ -418,7 +442,7 @@ const CheckoutForm = () => {
                             <div>
                                 <button onClick={clear} className="flex py-2 px-4 rounded text-xl bg-black mx-10 my-4">Clear <BackspaceIcon className="h-8 mx-2"/> </button>
                             </div>
-                              
+                            
                       </div>
                       
                   </div>

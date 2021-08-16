@@ -1,10 +1,11 @@
+import { PlusCircleIcon, RefreshIcon, BackspaceIcon } from '@heroicons/react/outline'
+import { useRouter } from 'next/router';
+import React from 'react'
 import { useState } from "react/cjs/react.development"
 import useLocalStorage from "../../../hooks/uselocalstorage";
-import { BackspaceIcon, CheckCircleIcon, RefreshIcon, SearchCircleIcon } from "@heroicons/react/outline";
-import { useRouter } from "next/router";
-import BlueButton from "../../atoms/button/BlueButton";
+import BlueButton from '../../atoms/button/BlueButton';
 
-function BasicsPricing() {
+function FormAdvert() {
     const router = useRouter();
 
     const today = new Date();
@@ -15,11 +16,7 @@ function BasicsPricing() {
     const now = yyyy + "-" + mm + "-" + dd;
 
     const LocalStorage = useLocalStorage;
-
-    const [err, setErr] = useState("");
-    const [wrong, setWrong] = useState("");
-    const [form, setForm] = useState(true)
-    const [result, setResult] = useState(false)
+    
     const [search, setSearch] = useState(false)
 
     const userId = LocalStorage("userId")[0];
@@ -27,11 +24,12 @@ function BasicsPricing() {
     const roles = LocalStorage("roles")[0];
     const username = LocalStorage("username")[0];
 
-    const [priv, setPrivate] = useState(0)
-    const [professional, setProfessional] = useState(0)
-
+    const [date, setDate] = useState(now)
+    const [price, setPrice] = useState(0)
     const [description, setDescription] = useState("")
     const [km, setKm] = useState(0)
+    const [brand, setBrand] = useState("")
+    const [modelCar, setModelCar] = useState("")
     const [release, setRelease] = useState("")
     const [fuel, setFuel] = useState("Diesel")
     const [transmission, setTransmission] = useState("Manual")
@@ -41,23 +39,22 @@ function BasicsPricing() {
         e.preventDefault()
         setDescription("")
         setKm(0)
+        setPrice(0)
         setRelease("")
         setFuel("Diesel")
         setTransmission("Manual")
         setRefCountry("FR")
         setWrong("")
     }
-  
-    const basics = async (e) => {
+
+    const add = async (e) => {
         e.preventDefault()
 
         setSearch(true)
 
-        const back_url = "http://localhost:4000/autovisual/pricing_normal"
+        const back_url = "http://localhost:4000/advert?role=" + roles
 
-        const request = new Request(
-            back_url,
-            {
+        const request = new Request(back_url, {
             method: "POST",
             headers: {
                 "Authorization": "Bearer " + token,
@@ -65,122 +62,37 @@ function BasicsPricing() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                txt: description,
+                description: description,
+                author: username,
+                date: date,
+                price: price,
+                brand: brand,
+                modelCar: modelCar,
                 km: km,
-                dt_entry_service: release,
+                release: release,
                 fuel: fuel,
                 transmission: transmission,
-                country_ref: ref_country
+                ref: ref_country
             })
-            }
-        )
+        })
 
         const res = await fetch(request)
-        const info = await res.json()
-        
-        if (info.statusCode == 400) {
-            setWrong(info.error)
-            setSearch(false)
-        }
-        else if(info.statusCode == 200) {
-            console.log(info.data.value)
-            const pri = info.data.value.c
-            const pro = info.data.value.b
-            setPrivate(info.data.value.c)
-            setProfessional(info.data.value.b)
-            setForm(false)
-            setResult(true)
-            setSearch(false)
-            
-            
-            const mail_url = "http://localhost:4000/mail"
-
-            const mail = new Request(mail_url, {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    priv: pri,
-                    professional: pro,
-                    username: username
-                })
-              }
-            )
-  
-            const res = await fetch(mail)
-            const response = await res.json()
-            console.log(response)
-            
-        }
+        const rep = await res.json()
+        console.log(rep)
+        setSearch(false)
+        router.push("/advertisement")
     }
-
 
     return (
         <div>
-
-            { form == false && result == true && (
-              <div className="w-1/2 ml-auto mr-auto pt-40">
-                  <div className="flex flex-col  p-10 m-10 rounded border-8 border-gray-400 bg-white">
-                      <div className="flex justify-center space-x-2 mb-5">
-                          <CheckCircleIcon className="h-10 stroke-current text-green-500" />
-                          <h1 className="text-3xl text-black te">
-                              Results
-                          </h1>
-                      </div>
-                      <p className="text-black text-xl text-center">
-                        Appreciation of the value of your vehicle, at market prices.
-                      </p>
-                      <div className="flex justify-evenly my-5">
-                        <div className="flex flex-col">
-                          <div>
-                            <label className="text-xl text-black">Private seller</label>
-                          </div>
-
-                          <div>
-                            <p className="text-xl text-black">{priv} €</p>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col">
-                          <div>
-                            <label className="text-xl text-black">Professional Seller</label>
-                          </div>
-
-                          <div>
-                            <p className="text-xl text-black">{professional} €</p>
-                          </div>
-
-                        </div>
-
-                      </div>
-
-                      <div className="flex justify-evenly">
-                        <div>
-                          <BlueButton title="Back to Home" redirect="/"/>
-                        </div>
-                        
-                        <div>
-                          <BlueButton title="Back to Profile" redirect="/profile"/>
-                        </div>
-                        
-                      </div>
-                      
-                  </div>
-              </div>
-            )}
-
-           { form == true && result == false && (
-              <div>
-                <form className="mt-10">
+            <form className="mt-10">
                   <div className="flex flex-col rounded border-8 border-gray-400 items-center mr-auto ml-auto mt-5 bg-white w-1/4">
                       
                       <div className="border-b-4 w-3/4 text-center text-black text-3xl font-bold my-5 ">
                           <p>Car Information</p>
                       </div>
                           
-                      <label className="text-xl font-bold text-black">Description</label>
+                      <label className="text-xl font-bold text-black">Title of the Advertisement</label>
                       <textarea className="h-auto text-black  text-center outline-none border-2 rounded my-2 w-60"
                                 value={description} onChange={(e) => setDescription(e.target.value)}
                                 name="description" id="description" cols="30" rows="10" 
@@ -189,17 +101,29 @@ function BasicsPricing() {
                                 The first words are more important than the following ones, try to prioritize the information.">
                       </textarea> 
                      
+                    
+
+                      <label className="text-xl font-bold text-black">Brand</label>    
+                      <input
+                      className="h-10 text-black border-2 text-center outline-none rounded my-2 w-60" value={brand} onChange={(e) => setBrand(e.target.value)}
+                      ></input>
+
+                    <label className="text-xl font-bold text-black">Model of the Car</label>    
+                        <input
+                      className="h-10 text-black border-2 text-center outline-none rounded my-2 w-60" value={modelCar} onChange={(e) => setModelCar(e.target.value)}
+                    ></input>
+
+
+
+                    <label className="text-xl font-bold text-black">Release Date</label>    
+                      <input
+                      className="h-10 text-black border-2 text-center outline-none rounded my-2 w-60" type="date" value={release} onChange={(e) => setRelease(e.target.value)}
+                      ></input>
 
                       <label className="text-xl font-bold text-black"  >Mileage</label>    
                       <input
                       className="h-10 text-black text-center outline-none border-2 rounded my-2 w-60" type="number"  value={km} onChange={(e) => setKm(e.target.valueAsNumber)}
                       ></input>
-
-                      <label className="text-xl font-bold text-black">Release Date</label>    
-                      <input
-                      className="h-10 text-black border-2 text-center outline-none rounded my-2 w-60" type="date" value={release} onChange={(e) => setRelease(e.target.value)}
-                      ></input>
-                          
                       
                       <div className="flex flex-col items-center my-2">
                           <label className="text-xl font-bold text-black">Fuel</label>    
@@ -248,16 +172,15 @@ function BasicsPricing() {
                               
                           </select>
                       </div>
-                      
-                      { wrong != "" && (
-                        <div className="text-center">
-                          <label className="text-red-600 text-xl">{wrong}</label>
-                        </div>
-                      )}
+
+                      <label className="text-xl font-bold text-black"  >Price</label>    
+                      <input
+                      className="h-10 text-black text-center outline-none border-2 rounded my-2 w-60" type="number"  value={price} onChange={(e) => setPrice(e.target.valueAsNumber)}
+                      ></input>
                       
                       <div className="flex justify-evenly">
                             <div>
-                                <button onClick={basics} className="flex rounded py-2 px-4 text-xl bg-black mx-10 my-4">Rate  <SearchCircleIcon className="h-8 mx-2"/> </button>             
+                                <button onClick={add} className="flex rounded py-2 px-4 text-xl bg-black mx-10 my-4">Add  <PlusCircleIcon className="h-8 mx-2"/> </button>             
                             </div>
 
                             { search == true &&(
@@ -275,11 +198,8 @@ function BasicsPricing() {
                   </div>
                 
                 </form>
-              </div>
-
-            )} 
         </div>
     )
 }
 
-export default BasicsPricing
+export default FormAdvert
