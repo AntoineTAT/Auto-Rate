@@ -15,7 +15,7 @@ function Header() {
         <header className="flex flex-col sm:flex-row m-5 justify-between items-center h-auto">
             <Image
                 className="object-contain cursor-pointer"
-                src="https://i.ibb.co/6nVnBDT/Game-Retribution.png"
+                src="https://i.ibb.co/61DKthq/Autorate.png"
                 width={100}
                 height={100}
                 onClick={back}

@@ -53,7 +53,7 @@ function BasicsPricing() {
 
         setSearch(true)
 
-        const back_url = "http://localhost:4000/autovisual/pricing_normal"
+        const back_url = "http://localhost:4000/autovisual/pricing_normal?roles=" + roles
 
         const request = new Request(
             back_url,

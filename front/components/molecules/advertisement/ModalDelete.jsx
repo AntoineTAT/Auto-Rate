@@ -20,7 +20,7 @@ function ModalDelete({advert}) {
         e.preventDefault();
 
     const delete_advert = new Request(
-        "http://localhost:4000/advert/" + advert.id,
+        "http://localhost:4000/advert/" + advert.id + "?role=" + roles,
         {
             method: "DELETE",
             headers: {

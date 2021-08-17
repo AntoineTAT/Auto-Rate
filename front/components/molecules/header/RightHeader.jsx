@@ -38,11 +38,14 @@ function RightHeader() {
             {userId != null &&(
                 <div className="flex flex-grow justify-evenly max-w-2xl mt-3">
 
-                    <Link href="/administration">
-                        <a>
-                            <HeaderItem title="ADMIN" Icon={CogIcon} />
-                        </a>
-                    </Link>
+                    { roles == "admin" && (
+                        <Link href="/administration">
+                            <a>
+                                <HeaderItem title="ADMIN" Icon={CogIcon} />
+                            </a>
+                        </Link>
+                    )}
+                    
 
                     <Link href="/profile">
                         <a>

@@ -75,7 +75,7 @@ function ModalEdit({advert}) {
             <div className="flex items-center cursor-pointer"
             onClick={openModal}>
             <div className="transition duration-100 
-            transform hover:scale-105 stroke-current text-red-600">
+            transform hover:scale-105 stroke-current text-red-600 pt-8">
             < PencilAltIcon className="h-8" />
             <p className="text-2xl font-normal">
                 Edit

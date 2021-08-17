@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Bandeau from '../components/molecules/Bandeau'
 import Header from '../components/organisms/header/Header'
 
 export default function Home() {
@@ -11,6 +12,8 @@ export default function Home() {
       </Head>
 
       <Header/>
+
+      <Bandeau />
     </div>
   )
 }

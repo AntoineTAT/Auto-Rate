@@ -218,7 +218,7 @@ const CheckoutForm = () => {
       e.preventDefault()
 
       setSearch(true)
-      const back_url = "http://localhost:4000/autovisual/pricing_vip"
+      const back_url = "http://localhost:4000/autovisual/pricing_vip?roles=" + roles
 
       const request = new Request(
         back_url,
