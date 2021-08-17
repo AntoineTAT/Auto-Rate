@@ -89,9 +89,9 @@ export class AdvertController {
         }
     }
 
-    @Delete('id')
-    @UseGuards(JwtAuthGuard)
-    @Roles(Role.Admin, Role.Client)
+    @Delete(':id')
+    //@UseGuards(JwtAuthGuard)
+    //@Roles(Role.Admin, Role.Client)
     async removeAdvert(@Param('id') advertId:  string) {
         const isDeleted = await this.advertService.deleteAdvert(advertId)
         

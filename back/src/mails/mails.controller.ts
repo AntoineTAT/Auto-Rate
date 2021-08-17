@@ -44,6 +44,19 @@ import {
         return result
     }
 
+    @Post('message')
+    async sendMessage(
+        @Body('message') message: string,
+        @Body('buyer') buyer: string,
+        @Body('sellor') sellor: string,
+    ) {
+        const result = await this.mailService.Message(
+            message,
+            sellor,
+            buyer
+        )
+        return result
+    }
 
   }
   

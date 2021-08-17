@@ -65,4 +65,26 @@ export class MailsService {
             message: 'Bill Mail Send'
         }
   }
+
+  async Message(message: string, sellor: string, buyer: string) {
+    const user = await this.UserModel.findOne({ username: sellor })
+
+    const user2 = await this.UserModel.findOne({ username: buyer})
+
+    await this.mailerService.sendMail({
+      to: user.email,
+      from: user2.email, // override default from
+      subject: 'Message',
+      template: 'src/mails/templates/message', // `.hbs` extension is appended automatically
+      context: {
+      // ✏️ filling curly brackets with content
+      message
+      },
+    })
+  
+    return {
+        statusCode: HttpStatus.OK,
+        message: 'Mail Send'
+    }
+  }
 }

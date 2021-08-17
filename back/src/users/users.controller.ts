@@ -86,7 +86,7 @@ export class UsersController {
                 userUsername,
                 userEmail,
                 userMailConfirmed,
-                userPassword,
+                password,
                 userinvoices,
                 userRole,
                 userStripeId,
