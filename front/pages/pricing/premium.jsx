@@ -7,7 +7,7 @@ import PremiumPricing from '../../components/organisms/pricing/PremiumPricing'
 import useLocalStorage from '../../hooks/uselocalstorage'
 
 
-export default function Home() {ù
+export default function Home() {
 
     const router = useRouter()
 
@@ -29,9 +29,9 @@ export default function Home() {ù
 
       <Header/>
 
-      {username && (
+      
         <PremiumPricing/>
-      )}
+      
 
       {!username && (
         <div className="flex flex-col bg-white w-1/4 mr-auto ml-auto rounded border-4">

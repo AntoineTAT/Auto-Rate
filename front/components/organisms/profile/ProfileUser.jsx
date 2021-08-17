@@ -73,6 +73,7 @@ function ProfileUser() {
             console.log(data_patch)
             setBox(true)
             setEdit(false)
+            setUsername(newUsername)
 
         }
         else {
