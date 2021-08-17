@@ -112,7 +112,32 @@ function BasicsPricing() {
             const res = await fetch(mail)
             const response = await res.json()
             console.log(response)
-            
+
+            const pricing = new Request(
+              "http://localhost:4000/users/" + userId + "?role=" + roles,
+              {
+                method: "PATCH",
+                headers: {
+                  Authorization: "Bearer " + token,
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  pricing: {
+                    priv: pri,
+                    professional: pro,
+                    description: description,
+                    date: now,
+                    price: 5,
+                    formula: "Basics"
+                  },
+                }),
+              }
+            );
+
+            const res_pricing = await fetch(pricing);
+            const data_pricing = await res_pricing.json();
+            console.log(data_pricing)
         }
     }
 

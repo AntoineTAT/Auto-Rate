@@ -1,12 +1,15 @@
 import React from 'react'
+import DescriptionAdvert from '../../components/molecules/advertisement/DescriptionAdvert'
 import Header from '../../components/organisms/header/Header'
 
 function Adv({advert}) {
+    console.log(advert)
+
     return (
         <div>
             <Header/>
 
-            
+            <DescriptionAdvert advert={advert}/>
         </div>
     )
 }
