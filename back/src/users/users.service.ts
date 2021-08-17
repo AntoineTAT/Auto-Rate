@@ -76,6 +76,7 @@ export class UsersService {
         password: User.password,
         stripeId: User.stripeId,
         invoices: User.invoices,
+        roles: User.roles,
         advert: User.advert,
         pricing: User.pricing
         }));
@@ -91,6 +92,7 @@ export class UsersService {
         password: User.password,
         stripeId: User.stripeId,
         invoices: User.invoices,
+        roles: User.roles,
         advert: User.advert,
         pricing: User.pricing
       };

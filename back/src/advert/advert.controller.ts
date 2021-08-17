@@ -56,8 +56,8 @@ export class AdvertController {
     }
 
     @Patch(':id')
-    //@UseGuards(JwtAuthGuard)
-    //@Roles(Role.Client, Role.Admin)
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.Client, Role.Admin)
     async updateAdvert(
         @Param('id') advertId: string,
         @Body('description') advertDescription: string,
@@ -90,8 +90,8 @@ export class AdvertController {
     }
 
     @Delete(':id')
-    //@UseGuards(JwtAuthGuard)
-    //@Roles(Role.Admin, Role.Client)
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.Admin, Role.Client)
     async removeAdvert(@Param('id') advertId:  string) {
         const isDeleted = await this.advertService.deleteAdvert(advertId)
         
